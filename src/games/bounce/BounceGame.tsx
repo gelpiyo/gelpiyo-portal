@@ -5,11 +5,11 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { Renderer } from './core/renderer';
 import { Game } from './core/game';
-import { initAudio, toggleMute, getMuted } from './core/audio';
+import { initAudio, toggleMute } from './core/audio';
 import {
   loadData, saveStageResult, unlockStage, saveEndlessResult,
 } from './core/storage';
-import { getStageIds, getNextStageId, STAGES, WORLDS } from './core/stages';
+import { getStageIds, getNextStageId, STAGES } from './core/stages';
 import { loadBounceAssets } from './core/assetLoader';
 import { BackButton } from '@/components/BackButton';
 import './bounce.css';

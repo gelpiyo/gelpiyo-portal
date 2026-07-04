@@ -6,7 +6,7 @@ import { Piyo, GameObject, ParticlePool } from './entities';
 import { circleVsRect, resolveCollision } from './physics';
 import { Slingshot } from './slingshot';
 import { Camera, Renderer } from './renderer';
-import { STAGES, WORLDS, getNextStageId } from './stages';
+import { STAGES, WORLDS } from './stages';
 import {
   playSfxBounce, playSfxLaunch, playSfxBreak,
   playSfxExplosion, playSfxClear, playSfxFail,
@@ -15,7 +15,7 @@ import {
   STATE, OBJ_TYPE, WORLD_WIDTH, WORLD_HEIGHT, GROUND_Y,
   TNT_EXPLOSION_RADIUS, TNT_EXPLOSION_DAMAGE,
 } from './types';
-import type { GameState, WorldData } from './types';
+import type { GameState, WorldData, ObjType } from './types';
 
 export interface GameCallbacks {
   onScoreUpdate?: (score: number) => void;
@@ -146,7 +146,7 @@ export class Game {
     const enemyCount = 1 + Math.floor(difficulty / 3);
     const blockCount = Math.floor(difficulty / 2);
 
-    const blockTypes = [OBJ_TYPE.WOOD];
+    const blockTypes: ObjType[] = [OBJ_TYPE.WOOD];
     if (this.wave >= 2) blockTypes.push(OBJ_TYPE.JELLY);
     if (this.wave >= 3) blockTypes.push(OBJ_TYPE.GLASS);
     if (this.wave >= 5) blockTypes.push(OBJ_TYPE.IRON);
@@ -210,7 +210,7 @@ export class Game {
       let y = placeMinY + Math.random() * (placeMaxY - placeMinY);
       const dist = Math.hypot((x + w / 2) - safeZoneX, (y + h / 2) - safeZoneY);
       if (dist < safeRadius) y -= safeRadius;
-      let eType = OBJ_TYPE.ENEMY;
+      let eType: ObjType = OBJ_TYPE.ENEMY;
       if (this.wave >= 3 && Math.random() < 0.15) eType = OBJ_TYPE.ENEMY_BOMB;
       else if (this.wave >= 5 && Math.random() < 0.1) eType = OBJ_TYPE.ENEMY_WARP;
       const enemy = new GameObject(x, y, w, h, eType, { imageKey: 'warpiyo' });
