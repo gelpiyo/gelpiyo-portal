@@ -49,7 +49,7 @@ export function loadAndChromaKey(
   threshold: number = 50,
   bgColor: { r: number; g: number; b: number } = { r: 255, g: 255, b: 255 }
 ): Promise<HTMLCanvasElement> {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => {

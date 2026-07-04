@@ -534,7 +534,7 @@ export class TDEngine {
     }
   }
 
-  private drawBase(x: number, y: number, hp: number, maxHp: number, color: string, label: string) {
+  private drawBase(x: number, y: number, hp: number, _maxHp: number, color: string, label: string) {
     const w = 36 * this.scale;
     const h = 60 * this.scale;
     const ctx = this.ctx;

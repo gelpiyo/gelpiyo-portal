@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './puzzle-ranger.css';
 import { GameEngine } from './core/game';
 import { loadPuzzleRangerAssets } from './core/assetLoader';
@@ -7,8 +7,7 @@ import { BackButton } from '@/components/BackButton';
 
 type Scene = 'title' | 'playing' | 'result' | 'gameover' | 'howto';
 
-interface Props {
-}
+
 
 export const PuzzleRangerGame: React.FC = () => {
   const [scene, setScene] = useState<Scene>('title');

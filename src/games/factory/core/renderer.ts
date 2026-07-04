@@ -1,4 +1,4 @@
-import type { GelpiyoType, DragState, LadleAnim, HitAreas } from './types';
+import type { GelpiyoType, DragState, LadleAnim } from './types';
 import { Customer, Pot, Mold } from './entity';
 
 const COLORS = {

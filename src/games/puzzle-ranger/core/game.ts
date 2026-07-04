@@ -81,7 +81,7 @@ export class GameEngine {
   }
 
   public nextWave() {
-    const next = this.tdEngine['currentWave'] + 1; // Actually we should track currentWave or get it from TD
+    // Actually we should track currentWave or get it from TD
     // We can just rely on the Game component tracking the wave and passing it.
     // But since tdEngine tracks currentWave inside, let's keep it simple: we pass wave from outside.
   }

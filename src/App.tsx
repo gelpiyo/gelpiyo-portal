@@ -1,6 +1,5 @@
 import { usePortalStore } from '@/stores/portalStore';
 import { Portal } from '@/pages/Portal';
-import { BackButton } from '@/components/BackButton';
 import { AirHockeyGame } from '@/games/air-hockey/AirHockeyGame';
 import { BounceGame } from '@/games/bounce/BounceGame';
 import { PuzzleRangerGame } from '@/games/puzzle-ranger/PuzzleRangerGame';
