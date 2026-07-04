@@ -1,5 +1,5 @@
 /** ゲーム識別子 */
-export type GameId = 'air-hockey' | 'factory' | 'bounce' | 'puzzle-ranger' | 'agent' | 'hammer-jump';
+export type GameId = 'air-hockey' | 'factory' | 'bounce' | 'puzzle-ranger' | 'agent' | 'hammer-jump' | 'speed-gunman';
 
 /** ポータルに表示するゲーム情報 */
 export interface GameInfo {

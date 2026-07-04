@@ -6,6 +6,7 @@ import { PuzzleRangerGame } from '@/games/puzzle-ranger/PuzzleRangerGame';
 import { GelpiyoFactoryGame } from '@/games/factory/GelpiyoFactoryGame';
 import { AgentGame } from '@/games/agent/AgentGame';
 import { HammerJump } from '@/games/hammer-jump/HammerJump';
+import { SpeedGunman } from '@/games/speed-gunman/SpeedGunman';
 
 function App(): React.JSX.Element {
   const currentScreen = usePortalStore((s) => s.currentScreen);
@@ -27,6 +28,8 @@ function App(): React.JSX.Element {
       {currentScreen === 'agent' && <AgentGame />}
 
       {currentScreen === 'hammer-jump' && <HammerJump />}
+
+      {currentScreen === 'speed-gunman' && <SpeedGunman />}
     </div>
   );
 }

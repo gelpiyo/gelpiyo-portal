@@ -57,6 +57,15 @@ const GAMES: GameInfo[] = [
     gradient: 'linear-gradient(135deg, hsl(20, 90%, 55%), hsl(350, 80%, 45%))',
     available: true,
   },
+  {
+    id: 'speed-gunman',
+    title: '早撃ちゲルぴよガンマン',
+    subtitle: '判別シューティング',
+    description: '敵か一般ぴよか瞬時に判別！最速の早撃ちで敵を撃ち抜け！🔫',
+    emoji: '🤠',
+    gradient: 'linear-gradient(135deg, hsl(35, 80%, 50%), hsl(15, 90%, 40%))',
+    available: true,
+  },
 ];
 
 export function Portal(): React.JSX.Element {
