@@ -2,17 +2,18 @@
 // assetLoader.ts - Image Loader with Chroma Keying
 // ============================================
 
+const baseUrl = import.meta.env.BASE_URL;
 const ASSET_MAP: Record<string, { src: string; isJpg: boolean }> = {
-  ranger_red:    { src: '/assets/puzzle-ranger/characters/ranger_red.jpg',    isJpg: true },
-  ranger_blue:   { src: '/assets/puzzle-ranger/characters/ranger_blue.jpg',   isJpg: true },
-  ranger_green:  { src: '/assets/puzzle-ranger/characters/ranger_green.jpg',  isJpg: true },
-  ranger_yellow: { src: '/assets/puzzle-ranger/characters/ranger_yellow.jpg', isJpg: true },
-  ranger_pink:   { src: '/assets/puzzle-ranger/characters/ranger_pink.jpg',   isJpg: true },
-  waru_piyo:     { src: '/assets/puzzle-ranger/characters/waru_piyo.jpg',     isJpg: true },
-  kuro_piyo:     { src: '/assets/puzzle-ranger/characters/kuro_piyo.jpg',     isJpg: true },
-  mecha_piyo:    { src: '/assets/puzzle-ranger/characters/mecha_piyo.png',    isJpg: false },
-  bura_piyo:     { src: '/assets/puzzle-ranger/characters/bura_piyo.png',     isJpg: false },
-  gold_piyo:     { src: '/assets/puzzle-ranger/characters/gold_piyo.png',     isJpg: false },
+  ranger_red:    { src: `${baseUrl}assets/puzzle-ranger/characters/ranger_red.jpg`,    isJpg: true },
+  ranger_blue:   { src: `${baseUrl}assets/puzzle-ranger/characters/ranger_blue.jpg`,   isJpg: true },
+  ranger_green:  { src: `${baseUrl}assets/puzzle-ranger/characters/ranger_green.jpg`,  isJpg: true },
+  ranger_yellow: { src: `${baseUrl}assets/puzzle-ranger/characters/ranger_yellow.jpg`, isJpg: true },
+  ranger_pink:   { src: `${baseUrl}assets/puzzle-ranger/characters/ranger_pink.jpg`,   isJpg: true },
+  waru_piyo:     { src: `${baseUrl}assets/puzzle-ranger/characters/waru_piyo.jpg`,     isJpg: true },
+  kuro_piyo:     { src: `${baseUrl}assets/puzzle-ranger/characters/kuro_piyo.jpg`,     isJpg: true },
+  mecha_piyo:    { src: `${baseUrl}assets/puzzle-ranger/characters/mecha_piyo.png`,    isJpg: false },
+  bura_piyo:     { src: `${baseUrl}assets/puzzle-ranger/characters/bura_piyo.png`,     isJpg: false },
+  gold_piyo:     { src: `${baseUrl}assets/puzzle-ranger/characters/gold_piyo.png`,     isJpg: false },
 };
 
 function processTransparency(img: HTMLImageElement): HTMLCanvasElement {

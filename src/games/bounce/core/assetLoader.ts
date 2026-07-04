@@ -3,10 +3,11 @@
 // ============================================
 
 /** ロードするアセット定義 */
+const baseUrl = import.meta.env.BASE_URL;
 const ASSET_MAP: Record<string, string> = {
-  gelpiyo:  '/assets/bounce/characters/gelpiyo.jpg',
-  warpiyo:  '/assets/bounce/characters/burapiyo.png',   // ワルぴよ = ブラぴよ画像使用（元のゲームと同じ）
-  burapiyo: '/assets/bounce/characters/burapiyo.png',
+  gelpiyo:  `${baseUrl}assets/bounce/characters/gelpiyo.jpg`,
+  warpiyo:  `${baseUrl}assets/bounce/characters/burapiyo.png`,   // ワルぴよ = ブラぴよ画像使用（元のゲームと同じ）
+  burapiyo: `${baseUrl}assets/bounce/characters/burapiyo.png`,
 };
 
 /**

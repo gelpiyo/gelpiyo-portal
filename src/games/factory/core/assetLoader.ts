@@ -79,28 +79,29 @@ export function loadAndChromaKey(
 
 export async function loadFactoryAssets(): Promise<Record<string, HTMLCanvasElement>> {
   const images: Record<string, HTMLCanvasElement> = {};
+  const baseUrl = import.meta.env.BASE_URL;
 
   const gelpiyos = {
-    yellow: '/assets/factory/characters/gelpiyo.webp',
-    pink: '/assets/factory/characters/momopiyo.webp',
-    green: '/assets/factory/characters/midopiyo.webp'
+    yellow: `${baseUrl}assets/factory/characters/gelpiyo.webp`,
+    pink: `${baseUrl}assets/factory/characters/momopiyo.webp`,
+    green: `${baseUrl}assets/factory/characters/midopiyo.webp`
   };
 
   for (const [id, path] of Object.entries(gelpiyos)) {
     images[id] = await loadAndChromaKey(path, 60, { r: 255, g: 255, b: 255 });
   }
 
-  images['pot'] = await loadAndChromaKey('/assets/factory/ui/pot_empty.webp', 40, { r: 0, g: 0, b: 0 });
-  images['pot_solid'] = await loadAndChromaKey('/assets/factory/ui/pot_solid.webp', 40, { r: 0, g: 0, b: 0 });
-  images['pot_melted'] = await loadAndChromaKey('/assets/factory/ui/pot_melted.webp', 40, { r: 0, g: 0, b: 0 });
-  images['pellet_icon'] = await loadAndChromaKey('/assets/factory/ui/pellet_icon.webp', 40, { r: 0, g: 0, b: 0 });
+  images['pot'] = await loadAndChromaKey(`${baseUrl}assets/factory/ui/pot_empty.webp`, 40, { r: 0, g: 0, b: 0 });
+  images['pot_solid'] = await loadAndChromaKey(`${baseUrl}assets/factory/ui/pot_solid.webp`, 40, { r: 0, g: 0, b: 0 });
+  images['pot_melted'] = await loadAndChromaKey(`${baseUrl}assets/factory/ui/pot_melted.webp`, 40, { r: 0, g: 0, b: 0 });
+  images['pellet_icon'] = await loadAndChromaKey(`${baseUrl}assets/factory/ui/pellet_icon.webp`, 40, { r: 0, g: 0, b: 0 });
 
-  images['ladle_empty'] = await loadAndChromaKey('/assets/factory/ui/ladle_empty.webp', 40, { r: 0, g: 0, b: 0 });
-  images['ladle_filled'] = await loadAndChromaKey('/assets/factory/ui/ladle_filled.webp', 40, { r: 0, g: 0, b: 0 });
+  images['ladle_empty'] = await loadAndChromaKey(`${baseUrl}assets/factory/ui/ladle_empty.webp`, 40, { r: 0, g: 0, b: 0 });
+  images['ladle_filled'] = await loadAndChromaKey(`${baseUrl}assets/factory/ui/ladle_filled.webp`, 40, { r: 0, g: 0, b: 0 });
 
-  images['mold_empty'] = await loadAndChromaKey('/assets/factory/ui/momopiyo_mold.webp', 40, { r: 0, g: 0, b: 0 });
-  images['mold_filled'] = await loadAndChromaKey('/assets/factory/ui/momopiyo_mold_filled.webp', 40, { r: 0, g: 0, b: 0 });
-  images['mold_solid'] = await loadAndChromaKey('/assets/factory/ui/momopiyo_mold_solid.webp', 40, { r: 0, g: 0, b: 0 });
+  images['mold_empty'] = await loadAndChromaKey(`${baseUrl}assets/factory/ui/momopiyo_mold.webp`, 40, { r: 0, g: 0, b: 0 });
+  images['mold_filled'] = await loadAndChromaKey(`${baseUrl}assets/factory/ui/momopiyo_mold_filled.webp`, 40, { r: 0, g: 0, b: 0 });
+  images['mold_solid'] = await loadAndChromaKey(`${baseUrl}assets/factory/ui/momopiyo_mold_solid.webp`, 40, { r: 0, g: 0, b: 0 });
 
   return images;
 }

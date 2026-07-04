@@ -21,7 +21,8 @@ export function HammerJump(): React.JSX.Element {
 
   useEffect(() => {
     const img = new window.Image();
-    img.src = '/assets/bounce/characters/gelpiyo.jpg';
+    const baseUrl = import.meta.env.BASE_URL;
+    img.src = `${baseUrl}assets/bounce/characters/gelpiyo.jpg`;
     img.onload = () => {
       // オフスクリーンCanvasで白背景を透過する
       const canvas = window.document.createElement('canvas');
