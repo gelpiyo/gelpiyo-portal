@@ -1,0 +1,289 @@
+/* ============================================
+   ぴよレンジャー TD - Component Styles
+   ============================================ */
+
+.puzzle-ranger-game {
+  width: 100%;
+  height: 100dvh;
+  position: relative;
+  overflow: hidden;
+  background: #0a0a1a;
+  color: #e8e8f0;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* UI Layout Variables */
+.puzzle-ranger-game {
+  --td-height: 45%;
+  --status-height: 5%;
+  --puzzle-height: 50%;
+  --color-text-dim: #8888aa;
+  --color-accent: #ff6b9d;
+  --color-yellow: #ffcc22;
+  --color-green: #44dd66;
+  --color-red: #ff4466;
+}
+
+.pr-screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 20px;
+}
+
+.pr-title-screen {
+  background: linear-gradient(170deg, #0d0d2b 0%, #1a0a2e 40%, #2a1040 100%);
+  gap: 16px;
+}
+
+.pr-title-logo {
+  text-align: center;
+  margin-bottom: 30px;
+  animation: prTitleFloat 3s ease-in-out infinite;
+}
+
+.pr-title-logo h1 {
+  font-size: 3rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--color-yellow), var(--color-accent), #4488ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px rgba(255,107,157,0.4));
+  line-height: 1.2;
+}
+
+.pr-title-sub {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  color: var(--color-text-dim);
+  margin-top: 8px;
+  text-shadow: 0 0 10px rgba(68,136,255,0.3);
+}
+
+@keyframes prTitleFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Glass panel */
+.pr-glass-panel {
+  background: rgba(20, 20, 50, 0.85);
+  border: 1px solid rgba(120, 120, 255, 0.15);
+  border-radius: 20px;
+  padding: 30px 24px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+/* Buttons */
+.pr-btn-primary, .pr-btn-secondary {
+  font-weight: 700;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 40px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  min-width: 220px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.pr-btn-primary {
+  background: linear-gradient(135deg, var(--color-accent), #ff3377);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(255, 107, 157, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.pr-btn-primary:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 10px rgba(255, 107, 157, 0.4);
+}
+
+.pr-btn-secondary {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+}
+
+.pr-btn-secondary:active {
+  transform: scale(0.95);
+  background: rgba(255,255,255,0.15);
+}
+
+/* Game Area Layout */
+.pr-game-screen {
+  flex-direction: column;
+  padding: 0;
+  z-index: 5;
+  background: #000;
+}
+
+.pr-td-area {
+  width: 100%;
+  height: var(--td-height);
+  position: relative;
+  background: linear-gradient(180deg, #0d1a30 0%, #1a2848 100%);
+  overflow: hidden;
+}
+
+.pr-td-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.pr-td-hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, transparent 100%);
+  z-index: 2;
+}
+
+.pr-hp-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+
+.pr-hp-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--color-text-dim);
+}
+
+.pr-hp-track {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pr-hp-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  width: 100%;
+}
+
+.pr-ally-hp .pr-hp-fill {
+  background: linear-gradient(90deg, var(--color-green), #88ff88);
+  box-shadow: 0 0 6px rgba(68,221,102,0.5);
+}
+
+.pr-enemy-hp {
+  flex-direction: row-reverse;
+}
+
+.pr-enemy-hp .pr-hp-fill {
+  background: linear-gradient(90deg, var(--color-red), #ff8888);
+  box-shadow: 0 0 6px rgba(255,68,102,0.5);
+}
+
+.pr-wave-info {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--color-yellow);
+  text-shadow: 0 0 8px rgba(255,204,34,0.4);
+  padding: 0 10px;
+  white-space: nowrap;
+}
+
+/* Status Bar */
+.pr-status-bar {
+  width: 100%;
+  height: var(--status-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  background: linear-gradient(90deg, rgba(30,10,50,0.95), rgba(10,10,30,0.95));
+  border-top: 1px solid rgba(120,120,255,0.1);
+  border-bottom: 1px solid rgba(120,120,255,0.1);
+  z-index: 6;
+}
+
+.pr-combo-display {
+  flex: 1;
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: var(--color-yellow);
+  text-shadow: 0 0 10px rgba(255,204,34,0.5);
+}
+.pr-combo-text-show {
+  animation: prComboPop 0.4s ease;
+}
+
+@keyframes prComboPop {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.3); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.pr-score-display {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.pr-score-value {
+  color: var(--color-accent);
+}
+
+/* Puzzle Area */
+.pr-puzzle-area {
+  width: 100%;
+  height: var(--puzzle-height);
+  position: relative;
+  background: linear-gradient(180deg, #0a0a1a 0%, #12082a 100%);
+  overflow: hidden;
+}
+
+.pr-puzzle-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Wave Announcement Overlay */
+.pr-wave-announce {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-yellow);
+  text-shadow: 0 0 20px rgba(255,204,34,0.6), 0 0 40px rgba(255,204,34,0.3);
+  z-index: 20;
+  pointer-events: none;
+  animation: prWaveAnnounce 2.5s ease forwards;
+}
+
+@keyframes prWaveAnnounce {
+  0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
+  20% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+  70% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+}

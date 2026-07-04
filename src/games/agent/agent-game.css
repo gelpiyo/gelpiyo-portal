@@ -1,0 +1,98 @@
+.agent-game-container {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: #000;
+  font-family: sans-serif;
+  position: relative;
+}
+
+.agent-game-container canvas {
+  /* Critical for PS1 style: no anti-aliasing / pixelated scaling */
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.agent-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100dvh;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  box-sizing: border-box;
+  color: white;
+  text-shadow: 2px 2px 0 #000;
+  font-family: 'Courier New', Courier, monospace; /* Retro font look */
+}
+
+.agent-controls-hint {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.agent-back-btn {
+  pointer-events: auto;
+  align-self: flex-start;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: 1px solid white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.agent-back-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.agent-dpad {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  pointer-events: auto;
+  user-select: none;
+}
+
+.dpad-row {
+  display: flex;
+  gap: 10px;
+}
+
+.dpad-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-family: 'Courier New', Courier, monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  touch-action: manipulation;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.1s, background 0.1s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dpad-btn:active {
+  background: rgba(255, 255, 255, 0.6);
+  transform: scale(0.9);
+}

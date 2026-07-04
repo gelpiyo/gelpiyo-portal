@@ -1,0 +1,31 @@
+/* ============================================
+   gelpiyo-factory.css
+   ============================================ */
+.factory-game-container {
+  width: 100%;
+  height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #111;
+  position: relative;
+  overflow: hidden;
+}
+
+.factory-canvas-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.factory-canvas-wrapper canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  touch-action: none;
+}

@@ -1,0 +1,165 @@
+.hammer-jump-container {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: #87CEEB; /* 初期背景色：空色 */
+  touch-action: none; /* スクロール防止 */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.hammer-jump-back-btn {
+  position: absolute;
+  top: env(safe-area-inset-top, 16px);
+  left: 16px;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hammer-jump-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* UIオーバーレイ */
+.hammer-jump-ui {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* 下のCanvasにタッチを貫通させる */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.hammer-jump-ui > * {
+  pointer-events: auto; /* UIのボタンなどは押せるようにする */
+}
+
+/* タイトル */
+.hammer-jump-title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: white;
+  text-shadow: 2px 2px 0 #333, -2px -2px 0 #333, 2px -2px 0 #333, -2px 2px 0 #333, 0 4px 8px rgba(0,0,0,0.5);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.hammer-jump-highscore {
+  font-size: 1.2rem;
+  color: #FFD700;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+  margin-bottom: 2rem;
+  font-weight: bold;
+}
+
+.hammer-jump-btn {
+  background: linear-gradient(180deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+  border: 4px solid #fff;
+  border-radius: 30px;
+  padding: 16px 40px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #d81b60;
+  cursor: pointer;
+  box-shadow: 0 8px 0 #c2185b, 0 12px 10px rgba(0,0,0,0.2);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.hammer-jump-btn:active {
+  transform: translateY(8px);
+  box-shadow: 0 0 0 #c2185b, 0 4px 5px rgba(0,0,0,0.2);
+}
+
+/* プレイ中UI */
+.hammer-jump-hud {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 16px) + 60px);
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.hammer-jump-timer {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 2px 2px 0 #000;
+}
+
+.hammer-jump-counter {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #FFeb3b;
+  text-shadow: 2px 2px 0 #000;
+}
+
+.hammer-jump-tap-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  /* タップ領域を見えなくするがイベントは受け取る */
+}
+
+/* リザルト */
+.hammer-jump-result-box {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  border: 4px solid #FFD700;
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.hammer-jump-result-label {
+  color: #fff;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.hammer-jump-result-score {
+  color: #FFD700;
+  font-size: 4rem;
+  font-weight: 900;
+  margin-bottom: 20px;
+  text-shadow: 0 4px 10px rgba(255, 215, 0, 0.5);
+}
+
+.hammer-jump-new-record {
+  color: #ff4081;
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  animation: pulse 1s infinite;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}

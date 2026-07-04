@@ -1,0 +1,206 @@
+/* =============================================
+   air-hockey.css — エアホッケー固有スタイル
+   クラス名は ah- プレフィックスでポータルと衝突回避
+   ============================================= */
+
+.ah-game {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, hsl(240, 100%, 97%), hsl(300, 100%, 97%));
+  padding: env(safe-area-inset-top) 12px env(safe-area-inset-bottom);
+}
+
+/* タイトル画面 */
+.ah-title-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  text-align: center;
+  animation: fadeIn 0.6s ease-out;
+}
+
+.ah-title {
+  font-size: 2.4rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, hsl(330, 100%, 64%), hsl(190, 95%, 68%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: hsl(220, 30%, 25%);
+}
+
+.ah-title-subtitle {
+  font-size: 0.95rem;
+  color: hsl(220, 15%, 55%);
+  margin-top: -16px;
+}
+
+.ah-title-puck-icon {
+  font-size: 4rem;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+.ah-start-btn {
+  padding: 16px 56px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  font-family: inherit;
+  color: #fff;
+  background: linear-gradient(135deg, hsl(330, 100%, 64%), hsl(350, 100%, 65%));
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 4px 20px hsla(330, 100%, 64%, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  min-height: 52px;
+  min-width: 44px;
+}
+
+.ah-start-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 10px hsla(330, 100%, 64%, 0.25);
+}
+
+/* ゲーム画面 */
+.ah-game-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  animation: fadeIn 0.4s ease-out;
+  width: 100%;
+  max-width: 380px;
+}
+
+.ah-game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 4px;
+}
+
+.ah-round-info {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: hsl(220, 15%, 55%);
+}
+
+.ah-sound-btn {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 1.2rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.ah-sound-btn:active {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* リザルト画面 */
+.ah-result-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  text-align: center;
+  animation: fadeIn 0.6s ease-out;
+}
+
+.ah-result-icon {
+  font-size: 4.5rem;
+  animation: bounce 1.5s ease-in-out infinite;
+}
+
+.ah-result-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+}
+
+.ah-result-title.win {
+  background: linear-gradient(135deg, hsl(45, 97%, 56%), hsl(330, 100%, 64%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ah-result-title.lose {
+  color: hsl(190, 95%, 68%);
+}
+
+.ah-result-score {
+  font-size: 1rem;
+  color: hsl(220, 15%, 55%);
+}
+
+.ah-result-btns {
+  display: flex;
+  gap: 16px;
+}
+
+.ah-retry-btn {
+  padding: 14px 40px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-family: inherit;
+  color: #fff;
+  background: linear-gradient(135deg, hsl(330, 100%, 64%), hsl(350, 100%, 65%));
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 4px 16px hsla(330, 100%, 64%, 0.3);
+  transition: transform 0.15s ease;
+  min-height: 48px;
+}
+
+.ah-retry-btn:active {
+  transform: scale(0.96);
+}
+
+.ah-home-btn {
+  padding: 14px 32px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-family: inherit;
+  color: hsl(220, 30%, 25%);
+  background: rgba(255, 255, 255, 0.7);
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-radius: 50px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s ease;
+  min-height: 48px;
+}
+
+.ah-home-btn:active {
+  transform: scale(0.96);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ah-game *,
+  .ah-game *::before,
+  .ah-game *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
