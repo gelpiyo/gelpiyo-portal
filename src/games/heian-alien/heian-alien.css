@@ -1,0 +1,346 @@
+/* ゲルぴよエイリアン スタイルシート */
+
+.heian-alien-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100dvh;
+  background-color: #000000;
+  color: #ffffff;
+  font-family: 'Courier New', Courier, monospace;
+  user-select: none;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+  padding: env(safe-area-inset-top) 16px env(safe-area-inset-bottom) 16px;
+}
+
+/* もどるボタン */
+.heian-alien-back-btn {
+  position: absolute;
+  top: max(16px, env(safe-area-inset-top));
+  left: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.heian-alien-back-btn:active {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(0.95);
+}
+
+/* タイトル画面・リザルト画面 */
+.heian-alien-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  z-index: 5;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.heian-alien-title-logo {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  background: #00ff00;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 0px #005500;
+}
+
+.heian-alien-subtitle {
+  font-size: 1rem;
+  color: #a0aec0;
+  margin-bottom: 40px;
+  letter-spacing: 0.1em;
+}
+
+.heian-alien-best-score {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 16px 24px;
+  border-radius: 12px;
+  margin-bottom: 40px;
+}
+
+.heian-alien-best-score p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+  color: #a0aec0;
+}
+
+.heian-alien-best-score span {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffd700;
+}
+
+.heian-alien-start-btn {
+  background: #00ff00;
+  border: 4px solid #005500;
+  color: #000000;
+  padding: 16px 48px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  border-radius: 0px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(255, 140, 0, 0.4);
+  transition: all 0.2s ease;
+}
+
+.heian-alien-start-btn:active {
+  transform: translateY(2px) scale(0.98);
+  box-shadow: 0 4px 10px rgba(255, 140, 0, 0.2);
+}
+
+/* ゲームプレイ画面レイアウト */
+.heian-alien-gameplay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+/* HUD (ヘッダー情報) */
+.heian-alien-hud {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  margin-top: 50px;
+  margin-bottom: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.heian-alien-hud-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.heian-alien-hud-label {
+  color: #a0aec0;
+  font-size: 0.8rem;
+}
+
+.heian-alien-hud-val {
+  color: #ffd700;
+}
+
+.heian-alien-hud-lives {
+  color: #ff4d4d;
+  letter-spacing: 2px;
+}
+
+/* ゲームキャンバス */
+.heian-alien-canvas-container {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #000000;
+  border: 4px solid #00ff00;
+  border-radius: 0px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  position: relative;
+}
+
+.heian-alien-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* コントローラー領域 */
+.heian-alien-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 16px 0;
+  box-sizing: border-box;
+  touch-action: none;
+}
+
+/* 十字キー */
+.heian-alien-dpad {
+  position: relative;
+  width: 130px;
+  height: 130px;
+}
+
+.heian-alien-dpad-btn {
+  position: absolute;
+  background: #000000;
+  border: 4px solid #00ff00;
+  border-radius: 0px;
+  color: #00ff00;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  touch-action: none;
+  transition: background 0.1s;
+}
+
+.heian-alien-dpad-btn:active,
+.heian-alien-dpad-btn.active {
+  background: #00ff00;
+  color: #000000;
+}
+
+.heian-alien-dpad-up {
+  top: 0;
+  left: 45px;
+  width: 40px;
+  height: 45px;
+  border-bottom: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.heian-alien-dpad-down {
+  bottom: 0;
+  left: 45px;
+  width: 40px;
+  height: 45px;
+  border-top: none;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.heian-alien-dpad-left {
+  top: 45px;
+  left: 0;
+  width: 45px;
+  height: 40px;
+  border-right: none;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.heian-alien-dpad-right {
+  top: 45px;
+  right: 0;
+  width: 45px;
+  height: 40px;
+  border-left: none;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.heian-alien-dpad-center {
+  top: 45px;
+  left: 45px;
+  width: 40px;
+  height: 40px;
+  background: #000000;
+  border: 4px solid #00ff00;
+  border-radius: 0;
+}
+
+/* アクションボタン */
+.heian-alien-action-group {
+  display: flex;
+  gap: 16px;
+}
+
+.heian-alien-action-btn {
+  width: 68px;
+  height: 68px;
+  border-radius: 0px;
+  border: 4px solid #00ff00;
+  font-weight: bold;
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  touch-action: none;
+  transition: transform 0.1s, background-color 0.1s;
+}
+
+.heian-alien-action-btn:active,
+.heian-alien-action-btn.active {
+  transform: scale(0.9);
+}
+
+.heian-alien-btn-dig {
+  background: #000000;
+  color: #00ff00;
+  border-color: #00ff00;
+}
+
+.heian-alien-btn-dig:active,
+.heian-alien-btn-dig.active {
+  background: #00ff00;
+  color: #000000;
+}
+
+.heian-alien-btn-fill {
+  background: #000000;
+  color: #00ff00;
+  border-color: #00ff00;
+}
+
+.heian-alien-btn-fill:active,
+.heian-alien-btn-fill.active {
+  background: #00ff00;
+  color: #000000;
+}
+
+.heian-alien-btn-label {
+  font-size: 0.7rem;
+  margin-top: 2px;
+}
+
+/* リザルト画面テキスト */
+.heian-alien-result-score {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffd700;
+  margin: 10px 0;
+}
+
+.heian-alien-new-record {
+  font-size: 1.25rem;
+  color: #ff4d4d;
+  font-weight: bold;
+  margin-bottom: 24px;
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse {
+  from { transform: scale(1); opacity: 0.8; }
+  to { transform: scale(1.1); opacity: 1; }
+}

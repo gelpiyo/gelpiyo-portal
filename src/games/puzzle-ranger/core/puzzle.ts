@@ -38,6 +38,20 @@ interface AnimData {
   matches?: Array<{ cells: Array<{ col: number; row: number }>; color: ColorType }>;
 }
 
+/** キラキラのスパーク星を描画するヘルパー */
+function drawSparkStar(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number) {
+  ctx.beginPath();
+  for (let i = 0; i < 8; i++) {
+    const angle = (Math.PI / 4) * i;
+    const radius = i % 2 === 0 ? r : r * 0.3;
+    const x = cx + Math.cos(angle) * radius;
+    const y = cy + Math.sin(angle) * radius;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+}
+
 export class PuzzleEngine {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
@@ -71,7 +85,7 @@ export class PuzzleEngine {
     this.callbacks = callbacks;
 
     // Initialize particle pool
-    const MAX_PARTICLES = 200;
+    const MAX_PARTICLES = 250;
     for (let i = 0; i < MAX_PARTICLES; i++) {
       this.particles.push({ active: false, x: 0, y: 0, vx: 0, vy: 0, life: 0, maxLife: 0, color: '', size: 0 });
     }
@@ -251,10 +265,6 @@ export class PuzzleEngine {
       sm.fill
     );
 
-    // Cast skill activation to GameEngine (will implement later via callback)
-    // Actually we don't have onSkillActivate in GameCallbacks yet, let's just trigger logic or add it.
-    // For now we'll just drop blocks. GameEngine uses it for TD logic.
-    // Let's add it to callbacks.
     (this.callbacks as any).onSkillActivate?.(skillType);
 
     this.animState = 'dropping';
@@ -414,40 +424,40 @@ export class PuzzleEngine {
   // --- Particles ---
 
   private spawnParticles(cx: number, cy: number, color: string) {
-    const count = 8;
+    const count = 12; // パーティクル数を増加
     for (let i = 0; i < count; i++) {
       const p = this.particles.find(p => !p.active);
       if (!p) break;
-      const angle = (Math.PI * 2 / count) * i + Math.random() * 0.5;
-      const speed = 2 + Math.random() * 4;
+      const angle = (Math.PI * 2 / count) * i + Math.random() * 0.4;
+      const speed = 1.5 + Math.random() * 5;
       p.active = true;
       p.x = cx;
       p.y = cy;
       p.vx = Math.cos(angle) * speed;
       p.vy = Math.sin(angle) * speed;
       p.life = 1;
-      p.maxLife = 0.4 + Math.random() * 0.3;
+      p.maxLife = 0.45 + Math.random() * 0.35;
       p.color = color;
-      p.size = 3 + Math.random() * 3;
+      p.size = 3.5 + Math.random() * 3.5;
     }
   }
 
   private spawnSkillParticles(cx: number, cy: number, color: string) {
-    const count = 24;
+    const count = 30; // 特殊ブロック用
     for (let i = 0; i < count; i++) {
       const p = this.particles.find(p => !p.active);
       if (!p) break;
       const angle = (Math.PI * 2 / count) * i + Math.random() * 0.3;
-      const speed = 4 + Math.random() * 8;
+      const speed = 3.5 + Math.random() * 8.5;
       p.active = true;
       p.x = cx;
       p.y = cy;
       p.vx = Math.cos(angle) * speed;
       p.vy = Math.sin(angle) * speed;
       p.life = 1;
-      p.maxLife = 0.5 + Math.random() * 0.4;
+      p.maxLife = 0.55 + Math.random() * 0.45;
       p.color = color;
-      p.size = 5 + Math.random() * 6;
+      p.size = 5.5 + Math.random() * 6.5;
     }
   }
 
@@ -463,8 +473,8 @@ export class PuzzleEngine {
       }
       p.x += p.vx;
       p.y += p.vy;
-      p.vy += 0.15;
-      p.vx *= 0.98;
+      p.vy += 0.12; // 重力微調整
+      p.vx *= 0.97;
     }
 
     if (this.animState === 'swapping' && this.animData) {
@@ -528,7 +538,8 @@ export class PuzzleEngine {
     const ctx = this.ctx;
     ctx.clearRect(0, 0, this.canvasW, this.canvasH);
 
-    ctx.strokeStyle = 'rgba(80, 80, 140, 0.15)';
+    // グリッド線
+    ctx.strokeStyle = 'rgba(100, 100, 200, 0.12)';
     ctx.lineWidth = 1;
     for (let r = 0; r <= ROWS; r++) {
       ctx.beginPath();
@@ -600,13 +611,13 @@ export class PuzzleEngine {
         if (skill) {
           const sm = SKILL_PANEL_TYPES[skill];
           const cm = COLOR_MAP[color];
-          const pulse = 1 + Math.sin(Date.now() / 300) * 0.06;
+          const pulse = 1 + Math.sin(Date.now() / 250) * 0.07;
           
           ctx.translate(cx, cy);
           ctx.scale(pulse, pulse);
           ctx.translate(-cx, -cy);
 
-          const radius = blockSize * 0.3;
+          const radius = blockSize * 0.28;
           this.drawRoundRect(ctx, drawX, drawY, blockSize, blockSize, radius);
 
           ctx.shadowColor = sm.glow;
@@ -621,13 +632,23 @@ export class PuzzleEngine {
           ctx.stroke();
           ctx.shadowBlur = 0;
 
+          // 3Dシャドウ
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+          ctx.fillRect(drawX, drawY + blockSize * 0.85, blockSize, blockSize * 0.15);
+
+          // ツヤハイライト（上部）
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+          ctx.beginPath();
+          ctx.ellipse(cx, drawY + blockSize * 0.25, blockSize * 0.35, blockSize * 0.12, 0, 0, Math.PI * 2);
+          ctx.fill();
+
           ctx.fillStyle = cm.fill;
           ctx.globalAlpha = 0.2;
           ctx.fillRect(drawX + blockSize * 0.6, drawY, blockSize * 0.4, blockSize * 0.4);
           ctx.globalAlpha = alpha;
 
           const fontSize = blockSize * 0.55;
-          ctx.font = `${fontSize}px serif`;
+          ctx.font = `${fontSize}px Outfit, serif`;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           ctx.fillStyle = '#fff';
@@ -647,10 +668,20 @@ export class PuzzleEngine {
           ctx.fillStyle = grad;
           ctx.fill();
 
+          // 3Dシャドウ
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.18)';
+          ctx.fillRect(drawX, drawY + blockSize * 0.82, blockSize, blockSize * 0.18);
+
+          // ツヤハイライト（上部）
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+          ctx.beginPath();
+          ctx.ellipse(cx, drawY + blockSize * 0.24, blockSize * 0.33, blockSize * 0.11, 0, 0, Math.PI * 2);
+          ctx.fill();
+
           ctx.shadowColor = cm.glow;
-          ctx.shadowBlur = 8;
+          ctx.shadowBlur = 10;
           ctx.strokeStyle = cm.fill;
-          ctx.lineWidth = 1.5;
+          ctx.lineWidth = 1.8;
           ctx.stroke();
           ctx.shadowBlur = 0;
 
@@ -661,15 +692,17 @@ export class PuzzleEngine {
       }
     }
 
+    // パーティクル描画 (キラキラ星エフェクト)
     for (const p of this.particles) {
       if (!p.active) continue;
       ctx.save();
       ctx.globalAlpha = p.life;
       ctx.fillStyle = p.color;
       ctx.shadowColor = p.color;
-      ctx.shadowBlur = 6;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+      ctx.shadowBlur = 8;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.life * 4.5);
+      drawSparkStar(ctx, 0, 0, p.size * p.life);
       ctx.fill();
       ctx.restore();
     }
@@ -690,7 +723,7 @@ export class PuzzleEngine {
   }
 
   private drawBlockShape(ctx: CanvasRenderingContext2D, cx: number, cy: number, size: number, shape: string) {
-    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
     ctx.beginPath();
 
     switch (shape) {

@@ -3,9 +3,10 @@ import { usePortalStore } from '@/stores/portalStore';
 
 interface GameCardProps {
   game: GameInfo;
+  isFocused?: boolean;
 }
 
-export function GameCard({ game }: GameCardProps): React.JSX.Element {
+export function GameCard({ game, isFocused = false }: GameCardProps): React.JSX.Element {
   const navigateToGame = usePortalStore((s) => s.navigateToGame);
 
   const handleClick = () => {
@@ -15,7 +16,7 @@ export function GameCard({ game }: GameCardProps): React.JSX.Element {
 
   return (
     <button
-      className={`game-card ${!game.available ? 'game-card--locked' : ''}`}
+      className={`game-card ${!game.available ? 'game-card--locked' : ''} ${isFocused ? 'game-card--focused' : ''}`}
       onClick={handleClick}
       disabled={!game.available}
       aria-label={`${game.title}をプレイ`}
@@ -28,14 +29,9 @@ export function GameCard({ game }: GameCardProps): React.JSX.Element {
         <div className="game-card__emoji">{game.emoji}</div>
         <div className="game-card__text">
           <h2 className="game-card__title">{game.title}</h2>
-          <span className="game-card__subtitle">{game.subtitle}</span>
-          <p className="game-card__description">{game.description}</p>
         </div>
         {!game.available && (
-          <div className="game-card__badge">COMING SOON</div>
-        )}
-        {game.available && (
-          <div className="game-card__play-icon">▶</div>
+          <div className="game-card__badge">SOON</div>
         )}
       </div>
     </button>

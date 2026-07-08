@@ -3,10 +3,12 @@
   width: 100vw;
   height: 100dvh;
   overflow: hidden;
-  background-color: #87CEEB; /* 初期背景色：空色 */
-  touch-action: none; /* スクロール防止 */
+  background-color: #87CEEB;
+  touch-action: none;
   user-select: none;
   -webkit-user-select: none;
+  font-family: 'Outfit', 'Inter', sans-serif;
+  color: #fff;
 }
 
 .hammer-jump-back-btn {
@@ -14,14 +16,22 @@
   top: env(safe-area-inset-top, 16px);
   left: 16px;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.8);
-  border: none;
-  padding: 8px 16px;
+  background: rgba(15, 15, 30, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 10px 20px;
   border-radius: 20px;
-  font-weight: bold;
-  color: #333;
+  font-weight: 800;
+  color: #fff;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.15s, transform 0.15s;
+}
+
+.hammer-jump-back-btn:active {
+  background: rgba(15, 15, 30, 0.85);
+  transform: scale(0.95);
 }
 
 .hammer-jump-canvas {
@@ -37,55 +47,83 @@
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none; /* 下のCanvasにタッチを貫通させる */
+  pointer-events: none;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   z-index: 10;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .hammer-jump-ui > * {
-  pointer-events: auto; /* UIのボタンなどは押せるようにする */
+  pointer-events: auto;
 }
 
-/* タイトル */
+/* Glassmorphism Title Panel */
+.hammer-jump-glass-panel {
+  background: rgba(15, 25, 45, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  padding: 40px 32px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 105, 180, 0.1);
+  text-align: center;
+  max-width: 340px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: popIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 .hammer-jump-title {
-  font-size: 2.5rem;
+  font-size: 2.6rem;
   font-weight: 900;
   color: white;
-  text-shadow: 2px 2px 0 #333, -2px -2px 0 #333, 2px -2px 0 #333, -2px 2px 0 #333, 0 4px 8px rgba(0,0,0,0.5);
-  margin-bottom: 2rem;
-  text-align: center;
+  line-height: 1.25;
+  margin: 0 0 1.5rem 0;
+  background: linear-gradient(135deg, #ffffff 0%, #ffea00 50%, #ff007f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
 }
 
 .hammer-jump-highscore {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   color: #FFD700;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
   margin-bottom: 2rem;
-  font-weight: bold;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 6px 18px;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .hammer-jump-btn {
-  background: linear-gradient(180deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
-  border: 4px solid #fff;
-  border-radius: 30px;
-  padding: 16px 40px;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #d81b60;
+  background: linear-gradient(180deg, #ff8da1 0%, #ff69b4 100%);
+  border: 3px solid #fff;
+  border-radius: 50px;
+  padding: 16px 48px;
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #fff;
   cursor: pointer;
-  box-shadow: 0 8px 0 #c2185b, 0 12px 10px rgba(0,0,0,0.2);
+  box-shadow: 0 6px 0 #b31c5b, 0 10px 16px rgba(0,0,0,0.3);
   transition: transform 0.1s, box-shadow 0.1s;
+  min-height: 52px;
 }
 
 .hammer-jump-btn:active {
-  transform: translateY(8px);
-  box-shadow: 0 0 0 #c2185b, 0 4px 5px rgba(0,0,0,0.2);
+  transform: translateY(6px);
+  box-shadow: 0 0 0 #b31c5b, 0 4px 6px rgba(0,0,0,0.2);
 }
 
-/* プレイ中UI */
+/* プレイ中HUD */
 .hammer-jump-hud {
   position: absolute;
   top: calc(env(safe-area-inset-top, 16px) + 60px);
@@ -93,22 +131,109 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  padding: 0 20px;
+  align-items: center;
+  padding: 0 16px;
   box-sizing: border-box;
 }
 
 .hammer-jump-timer {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 900;
   color: #fff;
-  text-shadow: 2px 2px 0 #000;
+  text-shadow: 2px 2px 0 #000, 0 0 10px rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.35);
+  padding: 6px 14px;
+  border-radius: 12px;
+  white-space: nowrap;
 }
 
 .hammer-jump-counter {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 900;
-  color: #FFeb3b;
-  text-shadow: 2px 2px 0 #000;
+  color: #FFea00;
+  text-shadow: 2px 2px 0 #000, 0 0 10px rgba(255, 234, 0, 0.3);
+  background: rgba(0,0,0,0.35);
+  padding: 6px 14px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+/* エネルギーチャージゲージ */
+.hammer-jump-gauge-wrapper {
+  flex: 1;
+  max-width: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+}
+
+.hammer-jump-gauge-label {
+  font-size: 0.62rem;
+  font-weight: 900;
+  color: #ff007f;
+  text-shadow: 0 0 6px rgba(255, 0, 127, 0.6);
+  letter-spacing: 0.05em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.hammer-jump-gauge-track {
+  width: 100%;
+  height: 10px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.6);
+}
+
+.hammer-jump-gauge-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00f2fe 0%, #00ffcc 100%);
+  width: 0%;
+  border-radius: 6px;
+  transition: width 0.1s ease-out;
+  box-shadow: 0 0 8px rgba(0, 242, 254, 0.85);
+}
+
+.hammer-jump-gauge-fill.overcharge {
+  background: linear-gradient(90deg, #ff007f 0%, #ffea00 100%);
+  box-shadow: 0 0 14px #ff007f;
+  animation: pulse 0.4s infinite alternate;
+}
+
+/* 飛行中HUD */
+.hammer-jump-flight-hud {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 16px) + 65px);
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.hammer-jump-alt {
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #FFea00;
+  text-shadow: 2px 2px 0 #000, 0 4px 12px rgba(255, 234, 0, 0.4);
+  font-style: italic;
+  letter-spacing: -0.01em;
+}
+
+.hammer-jump-target-msg {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #00ffcc;
+  text-shadow: 1px 1px 2px #000, 0 0 8px rgba(0,255,204,0.5);
+  background: rgba(0,0,0,0.45);
+  padding: 6px 20px;
+  border-radius: 20px;
+  animation: flash 1s infinite alternate;
 }
 
 .hammer-jump-tap-area {
@@ -118,48 +243,75 @@
   width: 100%;
   height: 100%;
   z-index: 5;
-  /* タップ領域を見えなくするがイベントは受け取る */
 }
 
 /* リザルト */
 .hammer-jump-result-box {
-  background: rgba(0, 0, 0, 0.7);
-  padding: 30px;
-  border-radius: 20px;
+  background: rgba(10, 15, 30, 0.8);
+  padding: 36px 32px;
+  border-radius: 24px;
   text-align: center;
-  border: 4px solid #FFD700;
+  border: 3px solid #FFD700;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.2);
   animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  max-width: 340px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .hammer-jump-result-label {
-  color: #fff;
+  color: #e2e8f0;
   font-size: 1.2rem;
-  margin-bottom: 10px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
 }
 
 .hammer-jump-result-score {
   color: #FFD700;
-  font-size: 4rem;
+  font-size: 3.5rem;
   font-weight: 900;
-  margin-bottom: 20px;
-  text-shadow: 0 4px 10px rgba(255, 215, 0, 0.5);
+  margin-bottom: 12px;
+  text-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+  font-style: italic;
+}
+
+.hammer-jump-destination {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #a0aec0;
+  margin-bottom: 24px;
+}
+
+.hammer-jump-dest-val {
+  color: #00ffcc;
+  font-weight: 900;
+  text-shadow: 0 0 8px rgba(0,255,204,0.3);
 }
 
 .hammer-jump-new-record {
-  color: #ff4081;
-  font-weight: bold;
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-  animation: pulse 1s infinite;
+  color: #ff007f;
+  font-weight: 900;
+  font-size: 1.6rem;
+  margin-bottom: 24px;
+  text-shadow: 0 0 12px rgba(255, 0, 127, 0.4);
+  animation: pulse 0.8s infinite;
 }
 
 @keyframes popIn {
-  0% { transform: scale(0.5); opacity: 0; }
+  0% { transform: scale(0.6); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
 }
 
 @keyframes pulse {
   0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
+  50% { transform: scale(1.08); }
   100% { transform: scale(1); }
+}
+
+@keyframes flash {
+  from { opacity: 0.85; }
+  to { opacity: 1; }
 }

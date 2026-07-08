@@ -1,0 +1,54 @@
+.game-loader {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, hsl(230, 25%, 12%), hsl(250, 30%, 8%));
+  z-index: 9999;
+}
+
+.game-loader__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.game-loader__piyo {
+  font-size: 48px;
+  animation: game-loader-bounce 1s ease-in-out infinite;
+}
+
+.game-loader__text {
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  color: hsl(45, 90%, 70%);
+  letter-spacing: 0.1em;
+}
+
+.game-loader__bar {
+  width: 140px;
+  height: 4px;
+  background: hsla(0, 0%, 100%, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.game-loader__bar-fill {
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, hsl(45, 90%, 60%), hsl(30, 85%, 55%));
+  border-radius: 2px;
+  animation: game-loader-slide 1.2s ease-in-out infinite;
+}
+
+@keyframes game-loader-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes game-loader-slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
+}

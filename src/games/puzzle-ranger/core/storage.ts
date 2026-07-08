@@ -1,20 +1,12 @@
 // ============================================
-// storage.ts - Save data management for Puzzle Ranger
+// storage.ts - Save data management for Puzzle Ranger (Migrated to useSaveDataStore)
 // ============================================
 
-const STORAGE_KEY = 'puzzle_ranger_save_data';
-
-export interface PuzzleRangerSaveData {
-  version: number;
-  highScore: number;
-  maxWave: number;
-  settings: {
-    muted: boolean;
-  };
-}
+import { useSaveDataStore } from '@/stores/saveDataStore';
+import type { PuzzleRangerSaveData } from '@/stores/saveDataStore';
+export type { PuzzleRangerSaveData };
 
 const DEFAULT_DATA: PuzzleRangerSaveData = {
-  version: 1,
   highScore: 0,
   maxWave: 1,
   settings: {
@@ -23,42 +15,31 @@ const DEFAULT_DATA: PuzzleRangerSaveData = {
 };
 
 export function loadData(): PuzzleRangerSaveData {
-  try {
-    const json = localStorage.getItem(STORAGE_KEY);
-    if (!json) return { ...DEFAULT_DATA };
-    const data = JSON.parse(json);
-    return { ...DEFAULT_DATA, ...data }; // Merge with default data for missing keys
-  } catch (e) {
-    console.warn('Failed to load save data:', e);
-    return { ...DEFAULT_DATA };
-  }
+  return useSaveDataStore.getState().games['puzzle-ranger'] || DEFAULT_DATA;
 }
 
 function saveData(data: PuzzleRangerSaveData) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  } catch (e) {
-    console.warn('Failed to save data:', e);
-  }
+  useSaveDataStore.getState().updatePuzzleRangerData(() => data);
 }
 
 export function saveSetting(key: keyof PuzzleRangerSaveData['settings'], value: any) {
-  const data = loadData();
+  const data = JSON.parse(JSON.stringify(loadData()));
   data.settings[key] = value;
   saveData(data);
 }
 
 export function updateHighScore(score: number, wave: number): boolean {
-  const data = loadData();
+  const data = JSON.parse(JSON.stringify(loadData()));
+  const prevMaxWave = data.maxWave;
   let isNewRecord = false;
   if (score > data.highScore) {
     data.highScore = score;
     isNewRecord = true;
   }
-  if (wave > data.maxWave) {
+  if (wave > prevMaxWave) {
     data.maxWave = wave;
   }
-  if (isNewRecord || wave > data.maxWave) {
+  if (isNewRecord || wave > prevMaxWave) {
     saveData(data);
   }
   return isNewRecord;

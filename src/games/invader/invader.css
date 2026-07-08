@@ -1,0 +1,99 @@
+.invader-container {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  width: 100%;
+  background-color: #000;
+  color: #fff;
+  font-family: 'Courier New', Courier, monospace;
+  overflow: hidden;
+  user-select: none;
+}
+
+.invader-back-btn {
+  position: absolute;
+  top: max(10px, env(safe-area-inset-top));
+  left: max(10px, env(safe-area-inset-left));
+  padding: 8px 12px;
+  background: transparent;
+  color: #0f0;
+  border: 1px solid #0f0;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 10;
+  font-weight: bold;
+  font-family: inherit;
+  touch-action: manipulation;
+}
+
+.invader-canvas-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.invader-canvas {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  background-color: #000;
+  image-rendering: pixelated;
+}
+
+.invader-controls {
+  height: 120px;
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #111;
+  border-top: 2px solid #333;
+  padding: 0 20px;
+  gap: 20px;
+}
+
+.invader-controls-dpad {
+  display: flex;
+  gap: 15px;
+}
+
+.invader-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 2px solid #555;
+  color: #fff;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.invader-btn:active {
+  background-color: rgba(0, 255, 0, 0.3);
+  border-color: #0f0;
+}
+
+.invader-btn-fire {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: rgba(255, 0, 0, 0.2);
+  border: 2px solid #f00;
+  color: #f00;
+  font-weight: bold;
+}
+
+.invader-btn-fire:active {
+  background-color: rgba(255, 0, 0, 0.5);
+  border-color: #f00;
+  color: #fff;
+}

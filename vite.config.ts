@@ -6,6 +6,10 @@ import path from 'path'
 export default defineConfig({
   base: '/gelpiyo-portal/',
   plugins: [react()],
+  server: {
+    port: 8080,
+    host: true,
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

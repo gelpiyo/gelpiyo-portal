@@ -1,0 +1,550 @@
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&display=swap');
+
+.rpg-container {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: #1a1a1a;
+  color: #fff;
+  font-family: 'DotGothic16', monospace;
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  --rpg-ui-height: 40dvh; /* UI領域の高さ割合 */
+}
+
+/* 戻るボタン */
+.rpg-back-btn {
+  position: absolute;
+  top: env(safe-area-inset-top, 16px);
+  left: 16px;
+  z-index: 1000;
+  background: rgba(20, 20, 20, 0.85);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.rpg-back-btn:active {
+  transform: scale(0.95);
+  background: rgba(40, 40, 40, 0.9);
+}
+
+/* 汎用ウィンドウ (ガラスモーフ風) */
+.rpg-window {
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(8px);
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  box-shadow: 
+    inset 0 0 10px rgba(255,255,255,0.1),
+    0 4px 15px rgba(0,0,0,0.5);
+  padding: 16px;
+  color: #e0e0e0;
+}
+
+/* =========================================
+   フィールド画面
+   ========================================= */
+.rpg-field-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* マップ描画領域 (画面上部 60%) */
+.rpg-map-viewport {
+  flex: 1;
+  height: calc(100dvh - var(--rpg-ui-height));
+  position: relative;
+  background-color: #2b5f2d; /* 草原ベース色 */
+  overflow: hidden;
+  box-shadow: inset 0 -10px 20px rgba(0,0,0,0.5);
+}
+
+/* スクロールするマップ本体 */
+.rpg-map-world {
+  position: absolute;
+  /* サイズはTS側から style で注入するため、ここでは初期値を設定 */
+  width: 100%; 
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(0,0,0,0.15) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(0,0,0,0.15) 2px, transparent 2px);
+  background-size: 32px 32px;
+  transition: transform 0.25s linear;
+}
+
+/* 草むらの装飾 */
+.rpg-map-world::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.05) 0%, transparent 20%),
+              radial-gradient(circle at 70% 60%, rgba(0,0,0,0.1) 0%, transparent 30%);
+  pointer-events: none;
+}
+
+/* マップ名表示 */
+.rpg-map-name-plate {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 8px 24px;
+  border-radius: 8px;
+  font-size: 20px;
+  border: 2px solid #fff;
+  z-index: 50;
+  pointer-events: none;
+  animation: fadeOutName 3s ease-in-out forwards;
+}
+@keyframes fadeOutName {
+  0% { opacity: 0; transform: translate(-50%, -10px); }
+  10% { opacity: 1; transform: translate(-50%, 0); }
+  80% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -10px); }
+}
+
+/* 画面暗転エフェクト */
+.rpg-fading-overlay {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  z-index: 200;
+  animation: fadeInOut 0.5s ease-in-out;
+}
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* プレイヤーキャラ */
+.rpg-player-sprite {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background: radial-gradient(circle at 30% 30%, #fffde7, #fdd835);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 
+    inset -2px -2px 4px rgba(0,0,0,0.3),
+    0 4px 6px rgba(0,0,0,0.4);
+  transition: left 0.25s linear, top 0.25s linear;
+  z-index: 10;
+}
+.rpg-player-sprite.moving {
+  animation: hop 0.25s ease-in-out;
+}
+@keyframes hop {
+  0%, 100% { transform: translateY(0) scale(1, 1); }
+  50% { transform: translateY(-8px) scale(0.95, 1.05); }
+}
+
+/* =========================================
+   UI領域 (下部 40%)
+   ========================================= */
+.rpg-ui-area {
+  height: var(--rpg-ui-height);
+  background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+  border-top: 4px solid #333;
+  display: flex;
+  padding: 12px;
+  gap: 12px;
+  padding-bottom: env(safe-area-inset-bottom, 12px);
+  position: relative;
+  z-index: 20;
+}
+
+/* 左側: 十字キーコンテナ */
+.rpg-dpad-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rpg-dpad {
+  display: grid;
+  grid-template-columns: repeat(3, 60px);
+  grid-template-rows: repeat(3, 60px);
+  gap: 4px;
+}
+
+.rpg-dbtn {
+  background: linear-gradient(145deg, #444, #222);
+  border: 2px solid #555;
+  border-radius: 12px;
+  color: rgba(255,255,255,0.7);
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  box-shadow: 0 4px 0 #111, inset 0 2px 2px rgba(255,255,255,0.1);
+  transition: all 0.1s;
+}
+.rpg-dbtn:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 #111, inset 0 2px 4px rgba(0,0,0,0.5);
+  background: #222;
+  color: #fff;
+}
+.rpg-dbtn:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.rpg-dbtn.up { grid-column: 2; grid-row: 1; border-radius: 12px 12px 4px 4px; }
+.rpg-dbtn.left { grid-column: 1; grid-row: 2; border-radius: 12px 4px 4px 12px; }
+.rpg-dbtn.right { grid-column: 3; grid-row: 2; border-radius: 4px 12px 12px 4px; }
+.rpg-dbtn.down { grid-column: 2; grid-row: 3; border-radius: 4px 4px 12px 12px; }
+
+/* 右側: ステータス等 */
+.rpg-status-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.rpg-status-window {
+  margin: 0;
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 4px 8px;
+  font-size: 15px;
+  line-height: 1.2;
+}
+.rpg-status-label {
+  color: #88ccff;
+}
+
+/* =========================================
+   バトル画面
+   ========================================= */
+.rpg-battle-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: url('data:image/svg+xml;utf8,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h40v40H0z" fill="%230a0a0a"/><path d="M0 0l40 40M40 0L0 40" stroke="%231a1a1a" stroke-width="1"/></svg>');
+  animation: fadeIn 0.5s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.rpg-battle-enemy-area {
+  flex: 1;
+  height: calc(100dvh - var(--rpg-ui-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.rpg-enemy-sprite {
+  font-size: 100px;
+  filter: drop-shadow(0 10px 10px rgba(0,0,0,0.8));
+  animation: floatEnemy 3s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+@keyframes floatEnemy {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-15px) scale(1.05); }
+}
+.rpg-enemy-sprite.shake {
+  animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+  filter: drop-shadow(0 0 20px red) sepia(1) hue-rotate(-50deg) saturate(5);
+}
+@keyframes shake {
+  10%, 90% { transform: translate3d(-4px, 0, 0); }
+  20%, 80% { transform: translate3d(4px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
+  40%, 60% { transform: translate3d(8px, 0, 0); }
+}
+
+.rpg-flash-effect {
+  position: absolute;
+  inset: 0;
+  background-color: white;
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+}
+.rpg-flash-effect.active {
+  animation: flash 0.3s ease-out;
+}
+@keyframes flash {
+  0% { opacity: 0.8; }
+  100% { opacity: 0; }
+}
+
+/* ステータスヘッダー (HP/MPバー) */
+.rpg-battle-status-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  border-bottom: 2px solid #555;
+  margin-top: calc(env(safe-area-inset-top, 16px) + 40px);
+}
+
+.rpg-battle-ui-area {
+  height: var(--rpg-ui-height);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #000;
+  border-top: 4px solid #fff;
+}
+
+.rpg-message-window {
+  margin: 0;
+  flex: 1;
+  font-size: 18px;
+  line-height: 1.6;
+  padding: 16px;
+  border-width: 4px;
+}
+
+.rpg-command-window {
+  margin: 0;
+  display: flex;
+  gap: 12px;
+  padding: 0; /* paddingをなくして横幅いっぱい使う */
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.rpg-command-btn {
+  flex: 1;
+  background: linear-gradient(180deg, #333, #111);
+  color: white;
+  border: 3px solid #fff;
+  border-radius: 8px;
+  font-size: clamp(14px, 4vw, 20px);
+  white-space: nowrap;
+  font-family: inherit;
+  padding: 12px 4px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 4px 0 #555;
+  transition: all 0.1s;
+}
+.rpg-command-btn:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 #555;
+}
+.rpg-command-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 4px 0 #555;
+}
+
+/* 技メニュー */
+.rpg-skill-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+.rpg-skill-menu-header {
+  display: flex;
+  justify-content: flex-end;
+}
+.rpg-command-btn.back {
+  padding: 4px 8px;
+  font-size: 12px;
+  background: #666;
+  border-color: #888;
+  box-shadow: 0 4px 0 #444;
+}
+.rpg-skill-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+.rpg-command-btn.skill {
+  font-size: 14px;
+  padding: 8px;
+  background: linear-gradient(180deg, #4b6584, #3867d6);
+  box-shadow: 0 4px 0 #2d52a8;
+}
+
+/* オーバーレイ */
+.rpg-dead-screen {
+  position: absolute;
+  inset: 0;
+  background: rgba(150, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 1s ease-out;
+}
+.rpg-dead-screen h1 {
+  color: #fff;
+  font-size: 40px;
+  margin-bottom: 20px;
+  text-shadow: 0 4px 10px #000;
+  letter-spacing: 4px;
+}
+
+/* クリア画面 */
+.rpg-clear-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #fffde7 0%, #fff 100%);
+  color: #333;
+  z-index: 500;
+  animation: fadeIn 2s ease-out;
+  padding: 20px;
+  text-align: center;
+}
+.rpg-clear-screen h1 {
+  font-size: clamp(24px, 5vw, 40px);
+  color: #d4af37;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 16px;
+}
+.rpg-clear-screen p {
+  font-size: 20px;
+  color: #666;
+}
+.rpg-clear-screen .rpg-command-btn {
+  background: linear-gradient(180deg, #d4af37, #b8860b);
+  border-color: #fff;
+  color: white;
+  box-shadow: 0 4px 0 #8b6508;
+}
+.rpg-clear-screen .rpg-command-btn:active {
+  box-shadow: 0 0 0 #8b6508;
+}
+
+/* ショップ画面 */
+.rpg-shop-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #2c3e50;
+  padding: 16px;
+  padding-top: calc(env(safe-area-inset-top, 16px) + 50px); /* 戻るボタンとかぶらないように */
+  animation: fadeIn 0.3s ease-out;
+}
+.rpg-shop-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #fff;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
+.rpg-shop-header h2 {
+  margin: 0;
+  font-size: 24px;
+}
+.rpg-shop-gold {
+  font-size: 20px;
+  color: #f1c40f;
+}
+.rpg-shop-list {
+  flex: 1;
+  min-height: 0; /* Flex内でスクロールを有効にするための必須プロパティ */
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.rpg-shop-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid #555;
+  border-radius: 8px;
+  padding: 12px;
+}
+.rpg-shop-item.owned {
+  opacity: 0.6;
+}
+.rpg-shop-item-info {
+  flex: 1;
+}
+.rpg-shop-item-name {
+  font-size: 20px;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.rpg-shop-item-desc {
+  font-size: 14px;
+  color: #aaa;
+}
+.rpg-shop-item-action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+.rpg-shop-item-price {
+  font-size: 18px;
+  color: #f1c40f;
+}
+.rpg-shop-footer {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+/* カスタムダイアログ */
+.rpg-dialog-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end; /* 画面下部に配置 */
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  animation: fadeIn 0.2s ease-out;
+  padding-bottom: 24px; /* 下部の余白 */
+}
+.rpg-dialog-window {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  max-width: 600px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}

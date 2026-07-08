@@ -15,6 +15,7 @@ window.addEventListener('keyup', (e) => {
   }
 })
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const setPlayerKey = (key: string, value: boolean) => {
   if (keys.hasOwnProperty(key)) {
     keys[key] = value

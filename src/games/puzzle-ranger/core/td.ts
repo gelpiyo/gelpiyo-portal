@@ -53,6 +53,88 @@ interface Projectile {
   targetSide: string;
 }
 
+// ── 多重スクロール背景 ──
+interface TDStar {
+  x: number;
+  y: number;
+  size: number;
+  speed: number;
+  opacity: number;
+}
+const starLayers: TDStar[][] = [];
+
+interface TDCloud {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  speed: number;
+  opacity: number;
+}
+const tdClouds: TDCloud[] = [];
+
+function initStarsAndClouds(w: number, h: number) {
+  if (starLayers.length > 0) return;
+  // 3つのレイヤーで奥行きを表現
+  for (let l = 0; l < 3; l++) {
+    const layer: TDStar[] = [];
+    const count = 12 + l * 8;
+    const speed = 0.015 + l * 0.025;
+    for (let i = 0; i < count; i++) {
+      layer.push({
+        x: Math.random() * w,
+        y: Math.random() * h * 0.7,
+        size: 0.5 + l * 0.6,
+        speed: speed,
+        opacity: 0.25 + l * 0.25,
+      });
+    }
+    starLayers.push(layer);
+  }
+
+  // 雲の初期化
+  for (let i = 0; i < 4; i++) {
+    tdClouds.push({
+      x: Math.random() * w,
+      y: 10 + Math.random() * 70,
+      w: 70 + Math.random() * 50,
+      h: 16 + Math.random() * 10,
+      speed: 0.03 + Math.random() * 0.04,
+      opacity: 0.06 + Math.random() * 0.06,
+    });
+  }
+}
+
+function updateStarsAndClouds(w: number, dt: number) {
+  // 星スクロール（左へ）
+  for (const layer of starLayers) {
+    for (const star of layer) {
+      star.x -= star.speed * dt * 0.3;
+      if (star.x < 0) star.x = w;
+    }
+  }
+
+  // 雲スクロール（右へ）
+  for (const cloud of tdClouds) {
+    cloud.x += cloud.speed * dt * 0.3;
+    if (cloud.x > w) cloud.x = -cloud.w;
+  }
+}
+
+/** 星形パスを描画 */
+function drawStarShape(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number, points = 5, innerRatio = 0.5) {
+  ctx.beginPath();
+  for (let i = 0; i < points * 2; i++) {
+    const angle = (Math.PI * i) / points - Math.PI / 2;
+    const radius = i % 2 === 0 ? r : r * innerRatio;
+    const x = cx + Math.cos(angle) * radius;
+    const y = cy + Math.sin(angle) * radius;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+}
+
 export class TDEngine {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
@@ -117,6 +199,8 @@ export class TDEngine {
 
     this.scale = this.canvasW / FIELD_WIDTH;
     this.groundY = this.canvasH * GROUND_Y_RATIO;
+
+    initStarsAndClouds(this.canvasW, this.canvasH);
   }
 
   public reset() {
@@ -182,7 +266,7 @@ export class TDEngine {
       for (const unit of this.enemyUnits) {
         if (unit.state === 'dead') continue;
         unit.hp -= bombDmg;
-        this.spawnDmgNum(unit.x * this.scale, this.groundY - 60, bombDmg, '#ff6600');
+        this.spawnDmgNum(unit.x * this.scale, this.groundY - 60, bombDmg, '#ffaa00');
         if (unit.hp <= 0) {
           unit.state = 'dead';
           unit.animTimer = 0;
@@ -190,7 +274,7 @@ export class TDEngine {
       }
       const baseDmg = 30;
       this.enemyBaseHp = Math.max(0, this.enemyBaseHp - baseDmg);
-      this.spawnDmgNum(ENEMY_BASE_X * this.scale, this.groundY - 80, baseDmg, '#ff6600');
+      this.spawnDmgNum(ENEMY_BASE_X * this.scale, this.groundY - 80, baseDmg, '#ffaa00');
       this.callbacks.onHpUpdate?.(this.allyBaseHp, this.allyBaseMaxHp, this.enemyBaseHp, this.enemyBaseMaxHp);
       
       if (this.enemyBaseHp <= 0) {
@@ -202,7 +286,7 @@ export class TDEngine {
       const prev = this.allyBaseHp;
       this.allyBaseHp = Math.min(this.allyBaseMaxHp, this.allyBaseHp + healAmt);
       const actual = this.allyBaseHp - prev;
-      this.spawnDmgNum(ALLY_BASE_X * this.scale, this.groundY - 80, actual, '#00ff88');
+      this.spawnDmgNum(ALLY_BASE_X * this.scale, this.groundY - 80, actual, '#00ffff');
       this.callbacks.onHpUpdate?.(this.allyBaseHp, this.allyBaseMaxHp, this.enemyBaseHp, this.enemyBaseMaxHp);
     }
   }
@@ -269,6 +353,8 @@ export class TDEngine {
   public update(dt: number) {
     if (this.waveState === 'waiting' || this.waveState === 'cleared' || this.waveState === 'gameover') return;
 
+    updateStarsAndClouds(this.canvasW, dt);
+
     if (this.waveState === 'spawning') {
       let allDone = true;
       for (const timer of this.waveSpawnTimers) {
@@ -304,7 +390,7 @@ export class TDEngine {
       const dx = proj.tx - proj.x;
       const dy = proj.ty - proj.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 5) {
+      if (dist < 6) {
         proj.active = false;
         continue;
       }
@@ -460,7 +546,7 @@ export class TDEngine {
     p.y = y;
     p.tx = tx;
     p.ty = ty;
-    p.speed = 8;
+    p.speed = 8.5;
     p.color = color;
     p.dmg = dmg;
     p.targetSide = targetSide;
@@ -470,101 +556,195 @@ export class TDEngine {
     const ctx = this.ctx;
     ctx.clearRect(0, 0, this.canvasW, this.canvasH);
 
+    // ── 空のファンタジーグラデーション ──
     const skyGrad = ctx.createLinearGradient(0, 0, 0, this.groundY);
-    skyGrad.addColorStop(0, '#0a1628');
-    skyGrad.addColorStop(0.6, '#152040');
-    skyGrad.addColorStop(1, '#1a2848');
+    skyGrad.addColorStop(0, '#04051a');
+    skyGrad.addColorStop(0.5, '#0c0f32');
+    skyGrad.addColorStop(1, '#1b143e');
     ctx.fillStyle = skyGrad;
     ctx.fillRect(0, 0, this.canvasW, this.groundY);
 
-    ctx.fillStyle = 'rgba(255,255,255,0.3)';
-    const starSeed = 42;
-    for (let i = 0; i < 30; i++) {
-      const sx = ((starSeed * (i + 1) * 7) % 1000) / 1000 * this.canvasW;
-      const sy = ((starSeed * (i + 1) * 13) % 1000) / 1000 * this.groundY * 0.6;
-      const ss = 1 + (i % 3);
-      ctx.fillRect(sx, sy, ss, ss);
+    // ── 多重スクロール星空 ──
+    for (let l = 0; l < starLayers.length; l++) {
+      ctx.fillStyle = `rgba(255, 255, 255, ${l * 0.25 + 0.3})`;
+      for (const star of starLayers[l]) {
+        ctx.fillRect(star.x, star.y, star.size, star.size);
+      }
     }
 
+    // ── ふんわり流れる雲 ──
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+    for (const cloud of tdClouds) {
+      ctx.beginPath();
+      ctx.ellipse(cloud.x + cloud.w / 2, cloud.y + cloud.h / 2, cloud.w / 2, cloud.h / 2, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // ── 地面のグラデーション ──
     const groundGrad = ctx.createLinearGradient(0, this.groundY, 0, this.canvasH);
-    groundGrad.addColorStop(0, '#2a3a20');
-    groundGrad.addColorStop(0.3, '#1a2a15');
-    groundGrad.addColorStop(1, '#0a1508');
+    groundGrad.addColorStop(0, '#1d2c14');
+    groundGrad.addColorStop(0.3, '#141e0e');
+    groundGrad.addColorStop(1, '#090c06');
     ctx.fillStyle = groundGrad;
     ctx.fillRect(0, this.groundY, this.canvasW, this.canvasH - this.groundY);
 
-    ctx.strokeStyle = 'rgba(100,160,80,0.3)';
-    ctx.lineWidth = 2;
+    // 地面の境界線（光るネオンライン風）
+    ctx.strokeStyle = 'rgba(68, 221, 102, 0.4)';
+    ctx.shadowColor = 'rgba(68, 221, 102, 0.3)';
+    ctx.shadowBlur = 8;
+    ctx.lineWidth = 2.5;
     ctx.beginPath();
     ctx.moveTo(0, this.groundY);
     ctx.lineTo(this.canvasW, this.groundY);
     ctx.stroke();
+    ctx.shadowBlur = 0;
 
+    // 自陣・敵陣の描画 (お城風)
     this.drawBase(ALLY_BASE_X * this.scale, this.groundY, this.allyBaseHp, this.allyBaseMaxHp, '#44dd66', '自陣');
     this.drawBase(ENEMY_BASE_X * this.scale, this.groundY, this.enemyBaseHp, this.enemyBaseMaxHp, '#ff4466', '敵陣');
 
+    // ユニットの描画
     const allUnits = [...this.allyUnits, ...this.enemyUnits].sort((a, b) => a.x - b.x);
     for (const unit of allUnits) {
       this.drawUnit(unit);
     }
 
+    // 発射物の描画 (星型・炎型・十字型)
     for (const proj of this.projectiles) {
       if (!proj.active) continue;
       ctx.save();
       ctx.fillStyle = proj.color;
       ctx.shadowColor = proj.color;
-      ctx.shadowBlur = 8;
-      ctx.beginPath();
-      ctx.arc(proj.x, proj.y, 4, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.shadowBlur = 10;
+      
+      ctx.translate(proj.x, proj.y);
+      const angle = (Date.now() / 70) % (Math.PI * 2);
+      ctx.rotate(angle);
+
+      if (proj.color === '#88ff88') { // 回復弾
+        ctx.fillRect(-2, -6, 4, 12);
+        ctx.fillRect(-6, -2, 12, 4);
+      } else if (proj.color === '#ff4466') { // 敵弾 (火の玉風)
+        ctx.beginPath();
+        ctx.arc(0, 0, 4.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = 'rgba(255, 68, 102, 0.35)';
+        ctx.beginPath();
+        ctx.moveTo(-4, -2.5);
+        ctx.lineTo(-12, 0);
+        ctx.lineTo(-4, 2.5);
+        ctx.fill();
+      } else { // 味方通常弾 (星型)
+        drawStarShape(ctx, 0, 0, 6.5, 4, 0.4);
+        ctx.fill();
+      }
       ctx.restore();
     }
 
+    // ダメージテキストの描画 (ポップアップ・バウンド風)
     for (const d of this.dmgNums) {
       if (!d.active) continue;
       ctx.save();
       ctx.globalAlpha = Math.min(d.life / 0.3, 1);
-      ctx.font = `bold ${14 * this.scale}px 'Outfit', sans-serif`;
+      
+      const angle = Math.sin(d.life * 12) * 0.08;
+      ctx.translate(d.x, d.y);
+      ctx.rotate(angle);
+      
+      ctx.font = `bold ${16 * this.scale}px 'Outfit', sans-serif`;
       ctx.fillStyle = d.color;
       ctx.shadowColor = d.color;
-      ctx.shadowBlur = 4;
+      ctx.shadowBlur = 6;
       ctx.textAlign = 'center';
-      ctx.fillText(d.value.toString(), d.x, d.y);
+      ctx.fillText(d.value.toString(), 0, 0);
       ctx.restore();
     }
   }
 
   private drawBase(x: number, y: number, hp: number, _maxHp: number, color: string, label: string) {
-    const w = 36 * this.scale;
-    const h = 60 * this.scale;
+    const w = 48 * this.scale;
+    const h = 75 * this.scale;
     const ctx = this.ctx;
     ctx.save();
 
-    ctx.fillStyle = hp > 0 ? color : '#333';
-    ctx.globalAlpha = hp > 0 ? 0.8 : 0.3;
-    ctx.fillRect(x - w / 2, y - h, w, h);
+    const isAlly = label === '自陣';
 
     if (hp > 0) {
-      ctx.globalAlpha = 1;
-      ctx.strokeStyle = '#fff';
-      ctx.lineWidth = 1.5;
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 10;
+    }
+
+    // ベース石壁 (お城風)
+    ctx.fillStyle = hp > 0 ? '#3f4257' : '#1f2029';
+    ctx.strokeStyle = hp > 0 ? color : '#333';
+    ctx.lineWidth = 2 * this.scale;
+    
+    ctx.beginPath();
+    ctx.rect(x - w / 2, y - h, w, h);
+    ctx.fill();
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // レンガ模様
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 1;
+    for (let i = 1; i < 5; i++) {
+      const ly = y - (h / 5) * i;
       ctx.beginPath();
-      ctx.moveTo(x, y - h);
-      ctx.lineTo(x, y - h - 15 * this.scale);
+      ctx.moveTo(x - w / 2, ly);
+      ctx.lineTo(x + w / 2, ly);
       ctx.stroke();
+    }
+
+    // お城の凸凹（銃眼）
+    ctx.fillStyle = hp > 0 ? '#2d2f3e' : '#121319';
+    const cw = w / 5;
+    for (let i = 0; i < 5; i += 2) {
+      ctx.fillRect(x - w / 2 + i * cw, y - h - 6 * this.scale, cw, 6 * this.scale);
+    }
+
+    // アーチ状の門
+    ctx.fillStyle = hp > 0 ? '#ffea00' : '#111';
+    if (!isAlly) ctx.fillStyle = hp > 0 ? '#ff4466' : '#111';
+    ctx.beginPath();
+    ctx.arc(x, y, 12 * this.scale, Math.PI, 0);
+    ctx.fill();
+    
+    ctx.strokeStyle = hp > 0 ? color : '#333';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(x, y, 12 * this.scale, Math.PI, 0);
+    ctx.stroke();
+
+    // 旗の描画
+    if (hp > 0) {
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x, y - h - 6 * this.scale);
+      ctx.lineTo(x, y - h - 22 * this.scale);
+      ctx.stroke();
+
       ctx.fillStyle = color;
       ctx.beginPath();
-      ctx.moveTo(x, y - h - 15 * this.scale);
-      ctx.lineTo(x + 12 * this.scale, y - h - 10 * this.scale);
-      ctx.lineTo(x, y - h - 5 * this.scale);
+      const flagDir = isAlly ? -1 : 1;
+      ctx.moveTo(x, y - h - 22 * this.scale);
+      ctx.lineTo(x + 16 * this.scale * flagDir, y - h - 17 * this.scale);
+      ctx.lineTo(x, y - h - 12 * this.scale);
+      ctx.fill();
+
+      // 旗のドットマーク
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(x + 6 * this.scale * flagDir, y - h - 17 * this.scale, 2.5 * this.scale, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    ctx.globalAlpha = 0.6;
-    ctx.font = `bold ${8 * this.scale}px 'Outfit', sans-serif`;
+    ctx.globalAlpha = 0.85;
+    ctx.font = `bold ${11 * this.scale}px 'Outfit', sans-serif`;
     ctx.fillStyle = '#fff';
     ctx.textAlign = 'center';
-    ctx.fillText(label, x, y + 12 * this.scale);
+    ctx.fillText(label, x, y + 16 * this.scale);
     ctx.restore();
   }
 
@@ -590,6 +770,12 @@ export class TDEngine {
 
     const imgKey = unit.side === 'ally' ? `ranger_${unit.color}` : (unit.imgKey || '');
     const img = this.charImages[imgKey];
+
+    // うっすら影の描画
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+    ctx.beginPath();
+    ctx.ellipse(x, this.groundY, unitSize * 0.45, 4 * this.scale, 0, 0, Math.PI * 2);
+    ctx.fill();
 
     if (img) {
       ctx.save();
