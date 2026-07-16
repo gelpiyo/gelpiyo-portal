@@ -1,5 +1,5 @@
 /** ゲーム識別子 */
-export type GameId = 'air-hockey' | 'factory' | 'bounce' | 'puzzle-ranger' | 'agent' | 'hammer-jump' | 'speed-gunman' | 'heian-alien' | 'invader' | 'rpg' | 'gelpiyo-viewer' | 'stone-skipping' | 'gelpiyo-race' | 'breeding';
+export type GameId = 'air-hockey' | 'factory' | 'bounce' | 'puzzle-ranger' | 'agent' | 'hammer-jump' | 'speed-gunman' | 'heian-alien' | 'invader' | 'rpg' | 'gelpiyo-viewer' | 'stone-skipping' | 'gelpiyo-race' | 'breeding' | 'gelpiyo-sandbox' | 'gelpiyo-action';
 
 /** カテゴリ識別子 */
 export type GameCategoryId = 'rpg' | 'puzzle' | 'mini-game' | 'factory' | 'other';

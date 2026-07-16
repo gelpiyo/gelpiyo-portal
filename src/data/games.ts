@@ -152,6 +152,26 @@ export const GAMES: GameInfo[] = [
     gradient: 'linear-gradient(135deg, hsl(100, 70%, 50%), hsl(140, 80%, 45%))',
     available: true,
   },
+  {
+    id: 'gelpiyo-sandbox',
+    categoryId: 'mini-game',
+    title: 'ゲルぴよクラフト',
+    subtitle: 'ブロック破壊アクション',
+    description: '体当たりでブロックを壊して進め！サンドボックス風アクション⛏️',
+    emoji: '⛏️',
+    gradient: 'linear-gradient(135deg, hsl(20, 80%, 50%), hsl(40, 90%, 40%))',
+    available: true,
+  },
+  {
+    id: 'gelpiyo-action',
+    categoryId: 'mini-game',
+    title: 'ゲルぴよアクション',
+    subtitle: '2Dアクションゲーム',
+    description: 'ジャンプとダッシュで駆け抜けろ！王道2Dアクション🏃‍♂️',
+    emoji: '🏃‍♂️',
+    gradient: 'linear-gradient(135deg, hsl(180, 80%, 50%), hsl(200, 90%, 40%))',
+    available: true,
+  },
 ];
 
 /**
@@ -176,4 +196,6 @@ export const GAME_COMPONENTS: Record<GameId, React.LazyExoticComponent<React.Com
   'stone-skipping': lazy(() => import('@/games/stone-skipping/StoneSkipping').then(m => ({ default: m.StoneSkipping }))),
   'gelpiyo-race': lazy(() => import('@/games/gelpiyo-race/GelpiyoRace').then(m => ({ default: m.GelpiyoRace }))),
   'breeding': lazy(() => import('@/games/breeding/BreedingGame').then(m => ({ default: m.BreedingGame }))),
+  'gelpiyo-sandbox': lazy(() => import('@/games/gelpiyo-sandbox/GelpiyoSandbox').then(m => ({ default: m.GelpiyoSandbox }))),
+  'gelpiyo-action': lazy(() => import('@/games/gelpiyo-action/GelpiyoAction').then(m => ({ default: m.GelpiyoAction }))),
 };

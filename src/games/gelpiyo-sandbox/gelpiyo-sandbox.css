@@ -1,0 +1,91 @@
+.gelpiyo-sandbox-container {
+  width: 100vw;
+  height: 100dvh;
+  background-color: #87CEEB;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  touch-action: none; /* Prevent scrolling and zooming */
+}
+
+.gelpiyo-sandbox-header {
+  position: absolute;
+  top: env(safe-area-inset-top, 10px);
+  left: env(safe-area-inset-left, 10px);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gelpiyo-sandbox-back-btn {
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.gelpiyo-sandbox-title {
+  color: white;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+.gelpiyo-sandbox-game {
+  width: 100%;
+  height: 100%;
+}
+
+.gelpiyo-sandbox-game canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.gelpiyo-sandbox-ui {
+  position: absolute;
+  bottom: env(safe-area-inset-bottom, 30px);
+  left: env(safe-area-inset-left, 20px);
+  right: env(safe-area-inset-right, 20px);
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none; /* Let touches pass through where there are no buttons */
+  z-index: 10;
+}
+
+.dpad, .action-buttons {
+  display: flex;
+  gap: 15px;
+  pointer-events: auto; /* Re-enable touches for buttons */
+}
+
+.dpad-btn, .action-btn {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  border: 3px solid rgba(255, 255, 255, 0.7);
+  color: #333;
+  font-size: 28px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  outline: none;
+}
+
+.dpad-btn:active, .action-btn:active {
+  background: rgba(255, 255, 255, 0.8);
+  transform: scale(0.9);
+}
+
+.action-btn.tackle {
+  font-size: 16px;
+}
