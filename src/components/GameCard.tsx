@@ -26,7 +26,15 @@ export function GameCard({ game, isFocused = false }: GameCardProps): React.JSX.
     >
       <div className="game-card__glow" />
       <div className="game-card__content">
-        <div className="game-card__emoji">{game.emoji}</div>
+        {game.image ? (
+          <img
+            src={`${import.meta.env.BASE_URL}${game.image}`}
+            alt={`${game.title} icon`}
+            className="game-card__image"
+          />
+        ) : (
+          <div className="game-card__emoji">{game.emoji}</div>
+        )}
         <div className="game-card__text">
           <h2 className="game-card__title">{game.title}</h2>
         </div>

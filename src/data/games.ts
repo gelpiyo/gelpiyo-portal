@@ -3,18 +3,17 @@ import type { GameId, GameInfo, GameCategoryId } from '@/types/game';
 
 /** カテゴリ定義 */
 export const CATEGORIES: { id: GameCategoryId; name: string; emoji: string }[] = [
-  { id: 'rpg', name: 'RPG', emoji: '⚔️' },
   { id: 'puzzle', name: 'パズル', emoji: '🧩' },
   { id: 'mini-game', name: 'ミニゲーム', emoji: '🕹️' },
   { id: 'factory', name: '製造', emoji: '🏭' },
-  { id: 'other', name: 'その他', emoji: '✨' },
+  { id: 'other', name: 'その他（動作テスト）', emoji: '✨' },
 ];
 
 /** ゲーム一覧データ */
 export const GAMES: GameInfo[] = [
   {
     id: 'air-hockey',
-    categoryId: 'mini-game',
+    categoryId: 'other',
     title: 'エアホッケー',
     subtitle: '対戦アクション',
     description: '3ラウンド先取で勝利！分裂アイテムに注目⭐',
@@ -39,6 +38,7 @@ export const GAMES: GameInfo[] = [
     subtitle: '物理パズルアクション',
     description: 'ゲルぴよを引っ張って飛ばす！ぷにぷにバウンドアクション💥',
     emoji: '🐤',
+    image: 'assets/factory/characters/gelpiyo_transparent.png',
     gradient: 'linear-gradient(135deg, hsl(45, 90%, 55%), hsl(30, 85%, 50%))',
     available: true,
   },
@@ -84,7 +84,7 @@ export const GAMES: GameInfo[] = [
   },
   {
     id: 'heian-alien',
-    categoryId: 'mini-game',
+    categoryId: 'other',
     title: 'ゲルぴよエイリアン',
     subtitle: '穴掘りアクション',
     description: '穴を掘って、落として、埋める！ワルぴよ軍団を退治せよ！👾',
@@ -94,7 +94,7 @@ export const GAMES: GameInfo[] = [
   },
   {
     id: 'invader',
-    categoryId: 'mini-game',
+    categoryId: 'other',
     title: 'インベーダー',
     subtitle: 'レトロシューティング',
     description: 'クラシックなアーケードシューティング！UFOを撃ち落とせ！👾',
@@ -104,7 +104,7 @@ export const GAMES: GameInfo[] = [
   },
   {
     id: 'rpg',
-    categoryId: 'rpg',
+    categoryId: 'other',
     title: 'ゲルぴよクエスト',
     subtitle: '2D RPG',
     description: 'フィールドを探索し、敵を倒してレベルアップ！王道RPGプロトタイプ⚔️',
@@ -134,7 +134,7 @@ export const GAMES: GameInfo[] = [
   },
   {
     id: 'gelpiyo-race',
-    categoryId: 'mini-game',
+    categoryId: 'other',
     title: 'ゲルぴよ競争',
     subtitle: '限界タップ連打',
     description: '左右交互に限界まで連打！ライバルを置き去りにしろ！🔥',
@@ -154,7 +154,7 @@ export const GAMES: GameInfo[] = [
   },
   {
     id: 'gelpiyo-sandbox',
-    categoryId: 'mini-game',
+    categoryId: 'other',
     title: 'ゲルぴよクラフト',
     subtitle: 'ブロック破壊アクション',
     description: '体当たりでブロックを壊して進め！サンドボックス風アクション⛏️',

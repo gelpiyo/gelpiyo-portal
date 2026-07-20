@@ -92,3 +92,18 @@
   font-size: 16px;
   font-weight: bold;
 }
+
+.extra-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  max-width: 150px;
+  justify-content: center;
+}
+
+.action-btn.small {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  font-size: 12px;
+}

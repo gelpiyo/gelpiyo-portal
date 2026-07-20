@@ -36,6 +36,13 @@ export const GelpiyoAction: React.FC = () => {
         <div className="action-buttons">
           <button id="btn-jump" className="control-btn action-btn" style={{ touchAction: 'none' }}>JUMP</button>
         </div>
+        <div className="action-buttons extra-actions">
+          <button id="btn-attack" className="control-btn action-btn small" style={{ touchAction: 'none' }}>ATK</button>
+          <button id="btn-damage" className="control-btn action-btn small" style={{ touchAction: 'none' }}>DMG</button>
+          <button id="btn-sleep" className="control-btn action-btn small" style={{ touchAction: 'none' }}>SLP</button>
+          <button id="btn-defeat" className="control-btn action-btn small" style={{ touchAction: 'none' }}>DIE</button>
+          <button id="btn-celebrate" className="control-btn action-btn small" style={{ touchAction: 'none' }}>WIN</button>
+        </div>
       </div>
     </div>
   );
