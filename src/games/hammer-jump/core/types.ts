@@ -61,6 +61,7 @@ export interface Star {
 export interface GameData {
   taps: number;
   startTime: number;
+  flightStartTime: number;
   piyoY: number;
   piyoScaleY: number;
   piyoScaleX: number;
